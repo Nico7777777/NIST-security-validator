@@ -81,7 +81,7 @@ class App(ctk.CTk):
 
         # TEXTBOX
         self.textbox = ctk.CTkTextbox(self, width=250)
-        self.textbox.grid(row=0, column=1, rowspan=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        self.textbox.grid(row=0, column=1, rowspan=3, columnspan=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
 
         # set default values
         self.appearance_mode_option_menu.set("Dark")
