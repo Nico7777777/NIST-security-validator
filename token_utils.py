@@ -9,10 +9,13 @@ def deleteSpaces(token):
 def deleteComma(token):
     return token.replace(",", "")
 
+def formatToken(token):
+    noSpaceToken = deleteSpaces(token)
+    return deleteComma(noSpaceToken)
+
 if __name__ == "__main__":
     token = "1011,010010100110111010,01   110011"
-    noSpaceToken = deleteSpaces(token)
-    noCommaToken = deleteComma(noSpaceToken)
-    k = validateToken(noCommaToken)
-    print(noCommaToken)
+    newToken = formatToken(token)
+    k = validateToken(newToken)
+    print(newToken)
     print(k)
