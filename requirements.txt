@@ -1,2 +1,4 @@
 tkinter-page==0.0.5
 customtkinter==5.2.2
+numpy==2.0.0
+scipy==1.14.0
