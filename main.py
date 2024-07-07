@@ -1,8 +1,6 @@
 import tkinter as tk
 import tkinter.messagebox as tkmsg
 import customtkinter as ctk
-from autocorelation import *
-from serial import *
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -92,7 +90,5 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    # app = App()
-    # app.mainloop()
-    # autocorelation()
-    serial()
+    app = App()
+    app.mainloop()
