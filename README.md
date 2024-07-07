@@ -25,3 +25,22 @@ The purpose of this test is to determine possible correlations within a sequence
 # Serial Test:
 
 The focus of this test is the frequency of all possible overlapping m-bit patterns across the entire sequence. The purpose of this test is to determine whether the number of occurrences of the 2^m m-bit overlapping patterns is approximately the same as would be expected for a random sequence. Truly random sequences belong to the uniform distribution, so the appearance of a certain pattern of "m" bits is equally probable. For m = 1, the Serial test is equivalent to the Frequency test.
+Serial Test:
+
+A brief description of the used functions:
+
+## check_len(v, n):
+This function checks if the elements of the sequence being analyzed are exactly n in number.
+
+## check_m(m, n):
+This function checks if m satisfies the condition of being less than or equal to the logarithm base 2 of n, all minus 2, a condition required for the algorithm to function properly.
+
+## build_secv(v, m): 
+In this function, we construct the 3 test sequences, where at the end of the initial sequence, if they exist, the first m-1 bits, m-2 bits, and m-3 bits are appended, respectively. For i from 1 to 3 inclusive, if m - i is positive, the respective bits are appended at the end; otherwise, if m - i is equal to 0, the initial sequence is returned, and in any other case, an empty list is returned.
+
+## found_pattern(v, m):
+This function helps to determine each pattern within a sequence, with its relative frequency, i.e., how many times that pattern of length m appears within the entire sequence. I used a dictionary where I sequentially introduced each pattern of length m, iterating through the vector from position 0 to n - m + 1. I then incremented the frequency of the found pattern if it already existed in the dictionary; otherwise, I assigned it a frequency of 1. This function returns all found patterns and their associated frequencies as key-value pairs.
+
+## Main:
+
+Everything begins by reading the length of the sequence n, the bit sequence, the significance level alpha, and the pattern length m from the keyboard, verifying all necessary conditions. I iterate through the list of sequences, call the found_pattern function, whose result (the dictionary) I store in found_patterns. Then, iterating through the obtained dictionary for each test sequence, I calculate the sum of the squared frequencies, which I then use in the calculation formula for the three functions. Additionally, I calculate the two test statistics and use the incomplete gamma function to determine the acceptance region of the null hypothesis.
