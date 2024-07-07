@@ -1,117 +1,115 @@
 import numpy as np
 from scipy.special import gammainc
 import math
-import sys  # ma ajuta sa imi opresc fortat programul.
+import sys  # helps me forcibly stop my program.
 
-#Ipoteza de nul 0 H : secvența binară generată este (pseudo)aleatoare.
-#Ipoteza alternativă A H : secvența binară generată nu este (pseudo)aleatoare.
+# Null hypothesis H0: The generated binary sequence is (pseudo)random.
+# Alternative hypothesis H1: The generated binary sequence is not (pseudo)random.
 def check_len(v, n):
   if len(v) < n:
-    print("Nu ati citit secventa de lungimea corecta")
+    print("You did not enter a sequence of the correct length")
     return 1
   return 0
 
 def check_m(m, n):
   if m > (math.log2(n) - 2):
-    print("Numarul m nu indeplineste conditia obligatorie!")
+    print("The number m does not meet the mandatory condition!")
     return 1
   return 0
 
 def build_secv(v, m):
     n = len(v)
-    secvente = []
+    sequences = []
     for i in range(1, 4):
         if m - i > 0:
           new_secv = v + v[0:m-i]
-          secvente.append(new_secv)
+          sequences.append(new_secv)
         elif m - i == 0:
           new_secv  = v
-          secvente.append(new_secv)
+          sequences.append(new_secv)
         else:
           break
-    return secvente
+    return sequences
 
 def found_pattern(v, m):
    n = len(v)
    pattern_dictionary  = {}
-   # preiau toate patternurile de lungime m
-   # si le adaug intr un dictionar
+   # Take all patterns of length m and add them to a dictionary
    for i in range(n - m + 1):
       pattern = tuple(v[i:i+m])
       if pattern in pattern_dictionary:
         pattern_dictionary[pattern] +=1
-        # cresc frecventa pattern-ului respectiv in dictionar, adica cresc valoarea cheii.
+        # Increase the frequency of the pattern in the dictionary, i.e., increase the key's value.
       else:
         pattern_dictionary[pattern] = 1
 
-   # cheile sunt patternurile, valorile sunt count-urile asociate cu pattern-urile.
-   # .items() genereaza perechea de iteratori (cheie, valoare)
+   # The keys are the patterns, the values are the counts associated with the patterns.
+   # .items() generates the pair of iterators (key, value)
    found_patterns = {pattern: count for pattern, count in pattern_dictionary.items() if count > 1}
    return found_patterns
 
 
-print("Introduceti lungimea dorita a secventei de biti:")
+print("Enter the desired length of the bit sequence:")
 n = int(input())
 n_str = str(n)
-print("Introduceti secventa de " + n_str + " biti:")
+print("Enter the sequence of " + n_str + " bits:")
 arr = input()
 v = list(map(int, arr.split(' ')))
-# aici imi preia toata linia in care citesc elementele
-# pe care le citesc separate printr-un spatiu, si apoi la mapez in inturi
-# in cadrul vectorului
+# Here it takes the entire line in which I read the elements
+# which I read separated by a space, and then map them to integers
+# in the vector
 if check_len(v, n) == 1:
-  sys.exit()  # in caz ca nu am citit corect v, se iese fortat.
+  sys.exit()  # If the input v is not correct, exit forcibly.
 
-print("Introduceti nivelul de semnificatie alfa:")
-alfa = float(input())
+print("Enter the significance level alpha:")
+alpha = float(input())
 
-print("Introduceti lungimea dorita a pattern-urilor de verificat, m: ")
+print("Enter the desired length of the patterns to check, m: ")
 m = int(input())
 if check_m(m, n) == 1:
   sys.exit()
 
-secvente = build_secv(v, m)
+sequences = build_secv(v, m)
 
 m_new = m
-# initializez cele 3 functii pe care le vom volosi la calculul functiilor de test.
+# Initialize the 3 functions that we will use to calculate the test functions.
 funcm = 0
 funcm_1 = 0
 funcm_2 = 0
-functii = [0] * (3)
+functions = [0] * (3)
 ct = 0
 
-for i, secventa in enumerate(secvente):
-    sum = 0  # calculam suma frecventelor ridicate la patrat
-    # print(f"s_{i+1}: {secventa}")
-    found_patterns = found_pattern(secventa, m_new)
+for i, sequence in enumerate(sequences):
+    sum = 0  # Calculate the sum of squared frequencies
+    # print(f"s_{i+1}: {sequence}")
+    found_patterns = found_pattern(sequence, m_new)
     # print(found_patterns)
-    for pattern, frecventa in found_patterns.items():
-      # afisez cheie + valoarea aferenta, => itemii
-      print(f"Pattern: {pattern}, frecventa: {frecventa}")
-      sum = sum + math.pow(frecventa, 2)
-      functii[ct] = ((math.pow(2, m_new))/n) * sum - n
-    print(functii[ct])
+    for pattern, frequency in found_patterns.items():
+      # Display the key + its value => items
+      print(f"Pattern: {pattern}, frequency: {frequency}")
+      sum = sum + math.pow(frequency, 2)
+      functions[ct] = ((math.pow(2, m_new))/n) * sum - n
+    print(functions[ct])
     print("\n")
     m_new = m_new - 1
     ct = ct + 1
 for i in range(0, 3):
-  print(functii[i])
-  # daca nu am populat un element al vectorului de functii, automat l-am pus pe 0
-  # din atribuirile initiale [0] * 3
-statistica_1 = 0
-statistica_2 = 0
-statistica_1 = functii[0] - functii[1]
-statistica_2 = functii[0] - 2 * functii[1] + functii[2]
+  print(functions[i])
+  # If an element of the functions vector is not populated, it was set to 0 by the initial assignments [0] * 3
+statistic_1 = 0
+statistic_2 = 0
+statistic_1 = functions[0] - functions[1]
+statistic_2 = functions[0] - 2 * functions[1] + functions[2]
 
-p_value1 = gammainc(math.pow(2, m - 2), statistica_1/2)
-p_value2 = gammainc(math.pow(2, m - 3), statistica_2/2)
-print(statistica_1)
-print(statistica_2)
+p_value1 = gammainc(math.pow(2, m - 2), statistic_1/2)
+p_value2 = gammainc(math.pow(2, m - 3), statistic_2/2)
+print(statistic_1)
+print(statistic_2)
 print(p_value1)
 print(p_value2)
-# daca se indeplinesc cele doua conditii, rezulta ca ipoteza de nul se accepta,
-# in caz contrar nu.
-if p_value1 > alfa and p_value2 > alfa:
-  print("Se accepta ipoteza de nul la nivelul de semnificatie primit ca intrare de " + str(alfa))
+# If both conditions are met, the null hypothesis is accepted,
+# otherwise it is not.
+if p_value1 > alpha and p_value2 > alpha:
+  print("The null hypothesis is accepted at the significance level provided: " + str(alpha))
 else:
-  print("Nu se accepta ipoteza de nul la nivelul de semnificatie primit ca intrare de " + str(alfa))
+  print("The null hypothesis is not accepted at the significance level provided: " + str(alpha))
