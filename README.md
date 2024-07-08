@@ -52,6 +52,6 @@ In this function, we construct the 3 test sequences, where at the end of the ini
 ## found_pattern(v, m):
 This function helps to determine each pattern within a sequence, with its relative frequency, i.e., how many times that pattern of length m appears within the entire sequence. I used a dictionary where I sequentially introduced each pattern of length m, iterating through the vector from position 0 to n - m + 1. I then incremented the frequency of the found pattern if it already existed in the dictionary; otherwise, I assigned it a frequency of 1. This function returns all found patterns and their associated frequencies as key-value pairs.
 
-## serisl():
+## serial():
 
 Everything begins by reading the length of the sequence n, the bit sequence, the significance level alpha, and the pattern length m from the keyboard, verifying all necessary conditions. I iterate through the list of sequences, call the found_pattern function, whose result (the dictionary) I store in found_patterns. Then, iterating through the obtained dictionary for each test sequence, I calculate the sum of the squared frequencies, which I then use in the calculation formula for the three functions. Additionally, I calculate the two test statistics and use the incomplete gamma function to determine the acceptance region of the null hypothesis.
