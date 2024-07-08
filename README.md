@@ -8,7 +8,7 @@ In this project, we aimed to implement several statistical tests of (pseudo) ran
 3. Autocorrelation Test
 4. Serial Test
 
-# Brief description of the functionality of the four tests:
+# Description of the functionality of the four tests:
 
 # Frequency (Monobit) Test:
 
@@ -21,6 +21,17 @@ The focus of the test is the proportion of ones within M-bit blocks. The purpose
 # Autocorrelation Test:
 
 The purpose of this test is to determine possible correlations within a sequence of n bits (non-cyclic) and its shifted version. For the sequence to be truly random, it should be independent of a new sequence obtained by a logical shift (to the left) of a given length (called the autocorrelation distance), so the degree of correlation of the generated sequence should be very small, as close to 0 as possible.
+
+A brief description of the used functions:
+
+## check_len:
+The function receives as arguments a vector of bytes and its length, an integer, and checks if a valid sequence has been entered, if the length of the read vector matches the number n.
+
+## check_interval:
+The function receives as arguments 3 integers x, y, and n, and has the role of checking that 1 <= x <= y <= [n/2], where y will be associated with d, the length of the shift. The user thus has the possibility to enter an interval for the length of the shift from which the algorithm will extract natural numbers, for greater precision of the autocorrelation test, as it is recommended to check the sequence with as many shift lengths as possible.
+
+## autocorrelation():
+User-entered data is read: the length of the bit sequence, the corresponding sequence, the significance level alpha, and the ends of the interval from which the length for the shift, d, will be extracted. In a repetitive for loop, I will iterate through the initial bit sequence and extract into a vector, new_secv, the values obtained by the xor operation between the elements at position i and (i + d), for i from 0 to (n-d-1), and this sum will represent the number of bits in sequence n s that differ from the bits in the shifted version. With the help of this sum, I calculate the test statistic, then check if the p_value, i.e., the probability of making a Type I error (rejecting the null hypothesis H0, although it is true), which is then compared to the significance level (the maximum probability with which the null hypothesis H0 is rejected).
 
 # Serial Test:
 
@@ -41,6 +52,6 @@ In this function, we construct the 3 test sequences, where at the end of the ini
 ## found_pattern(v, m):
 This function helps to determine each pattern within a sequence, with its relative frequency, i.e., how many times that pattern of length m appears within the entire sequence. I used a dictionary where I sequentially introduced each pattern of length m, iterating through the vector from position 0 to n - m + 1. I then incremented the frequency of the found pattern if it already existed in the dictionary; otherwise, I assigned it a frequency of 1. This function returns all found patterns and their associated frequencies as key-value pairs.
 
-## Main:
+## serisl():
 
 Everything begins by reading the length of the sequence n, the bit sequence, the significance level alpha, and the pattern length m from the keyboard, verifying all necessary conditions. I iterate through the list of sequences, call the found_pattern function, whose result (the dictionary) I store in found_patterns. Then, iterating through the obtained dictionary for each test sequence, I calculate the sum of the squared frequencies, which I then use in the calculation formula for the three functions. Additionally, I calculate the two test statistics and use the incomplete gamma function to determine the acceptance region of the null hypothesis.
