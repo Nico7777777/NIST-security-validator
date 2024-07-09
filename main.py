@@ -1,9 +1,24 @@
 import tkinter as tk
 import tkinter.messagebox as tkmsg
+from tkinter import END
+
 import customtkinter as ctk
+from enum import Enum
+from monobit import monoBit
+from mbit import mBit
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
+
+
+class NIST(Enum):
+    MONOBIT = 1
+    MBIT = 2
+    AUTOCORRELATION = 3
+    SERIA = 4
+
+test_number = NIST.MONOBIT
+root = None
 
 
 def open_input_dialog_event():
@@ -20,8 +35,59 @@ def change_scaling_event(new_scaling: str):
     ctk.set_widget_scaling(new_scaling_float)
 
 
-def sidebar_button_event():
-    print("sidebar_button click")
+def monobit_button_event():
+    print("Monobit Event")
+    global test_number
+    test_number = NIST.MONOBIT
+
+
+def mbit_button_event():
+    print("MBit Event")
+    global test_number
+    test_number = NIST.MBIT
+
+
+def autocorrelation_button_event():
+    print("Autocorrelation Event")
+    global test_number
+    test_number = NIST.AUTOCORRELATION
+
+
+def seria_button_event():
+    print("Seria Event")
+    global test_number
+    test_number = NIST.SERIA
+
+
+def run_test():
+    root.textbox.delete('1.0', END)
+    print(test_number)
+    token = root.entry.get()
+    print("The token is: " + token)
+
+    pop_up_alpha = ctk.CTkInputDialog(text="Introduce the significance level: ", title="Alpha")
+    alpha = float(pop_up_alpha.get_input())
+    print(f"The alpha is: {alpha}")
+
+    match test_number:
+        case NIST.MONOBIT:
+            # Call Monobit
+            response = monoBit(alpha, token)
+            root.textbox.insert("0.0", response)
+            print("Monobit response:", response)
+        case NIST.MBIT:
+            # Read M
+            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="Alpha")
+            m = int(pop_up_m.get_input())
+            print(f"The m is: {m}")
+            # Call MBit
+            response = mBit(alpha, m, token)
+            root.textbox.insert("0.0", response)
+            print("M-Bit response:", response)
+        case NIST.AUTOCORRELATION:
+            print("Autocorrelation")
+        case NIST.SERIA:
+            print("Seria")
 
 
 class App(ctk.CTk):
@@ -40,23 +106,22 @@ class App(ctk.CTk):
         # create sidebar frame with widgets
         self.sidebar_frame = ctk.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)  # Sidebar-ul va lua tot spatiul disponibil de ocupat
+        self.sidebar_frame.grid_rowconfigure(5, weight=1)  # Sidebar-ul va lua tot spatiul disponibil de ocupat
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="N.S.V.", font=ctk.CTkFont(size=20, weight="bold"))
 
-        # TODO: trebuie sa creez 4 event-listener diferite pentru cele 4 teste facute de Ema
-        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, command=sidebar_button_event,
+        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, command=monobit_button_event,
                                               text="Frequency Test")
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=20)
 
-        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, command=sidebar_button_event,
+        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, command=mbit_button_event,
                                               text="M-bit Test")
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=20)
 
-        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, command=sidebar_button_event,
+        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, command=autocorrelation_button_event,
                                               text="Autocorrelation Test")
         self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=20)
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, command=sidebar_button_event,
+        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, command=seria_button_event,
                                               text="Seria Test")
         self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=20)
 
@@ -76,7 +141,7 @@ class App(ctk.CTk):
         self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         self.main_button_1 = ctk.CTkButton(master=self, fg_color="transparent", border_width=2,
-                                           text_color=("blue", "#DCE4EE"), text="Run tests", height=100)
+                                           text_color=("blue", "#DCE4EE"), text="Run tests", height=100, command=run_test)
         self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # TEXTBOX
@@ -86,9 +151,8 @@ class App(ctk.CTk):
         # set default values
         self.appearance_mode_option_menu.set("Dark")
         self.scaling_option_menu.set("100%")
-        self.textbox.insert("0.0", "bla bla hat mat johnutule.\n\n" * 20)
 
 
 if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    root = App()
+    root.mainloop()
