@@ -15,22 +15,27 @@ def check_interval(_x: int, _y: int, _n: int) -> bool:
 def autocorrelation(n, arr, alpha, x, y):
     v = list(int(bit) for bit in arr)
     if not check_len(bytes(v), n):
-        return "Error: Sequence length is not correct"
+        return "Sequence length is not correct"
     
     if not check_interval(x, y, n):
-        return "Error: Interval is not correct"
+        return "Interval is not correct"
 
     result = ""
     ok = 1
     for d in range(x, y + 1):
+        # d will be the length of the left shift
         new_secv = [0] * (n - d)
         sum = 0
+        # In the vector new_secv I will store the sequence processed with the xor operator
         for i in range(len(new_secv)):
             new_secv[i] = v[i] ^ v[i + d]
+             # Applied xor between the corresponding bits.
             new_secv[i] = 2 * new_secv[i] - 1
+             # Converted the bits from 0 to -1, while the 1 bit remained 1.
             sum = sum + new_secv[i]
         sum_abs = abs(sum)
         sum_abs = sum_abs / math.sqrt(n - d)
+        # In sum_abs I  will score the test statistic
         p_value = math.erfc(sum_abs / math.sqrt(2))
         result += f"Calculated p_value is: {p_value}\n"
         if p_value < alpha:
@@ -38,6 +43,9 @@ def autocorrelation(n, arr, alpha, x, y):
             ok = 0
             break
 
+    # If the for loop does not exit with a forced break, the null hypothesis is accepted,
+    # otherwise, the following two lines are not executed, the hypothesis has already been analyzed,
+    # and it was concluded that it is not accepted because the condition was not met.
     if ok == 1:
         result += f"The null hypothesis is accepted at the significance level {alpha}\n"
     
