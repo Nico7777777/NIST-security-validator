@@ -9,6 +9,7 @@ from monobit import monoBit
 from mbit import mBit
 from serial import serial
 from autocorelation import autocorrelation
+from token_utils import *
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -68,7 +69,16 @@ def run_test():
     token = root.entry.get()
     print("The token is: " + token)
 
-    pop_up_alpha = ctk.CTkInputDialog(text="Introduce the significance level: ", title="Alpha")
+    token = formatToken(token)
+    print("The formated token is: " + token)
+
+    # Validate Token
+    if not validateToken(token):
+        root.textbox.insert("0.0", "The hash is not valid.")
+        print("M-Bit response:", "Token not valid")
+        return
+
+    pop_up_alpha = ctk.CTkInputDialog(text="Enter the significance level: ", title="Alpha")
     alpha = float(pop_up_alpha.get_input())
     print(f"The alpha is: {alpha}")
 
@@ -80,7 +90,7 @@ def run_test():
             print("Monobit response:", response)
         case NIST.MBIT:
             # Read M
-            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="M value")
+            pop_up_m = ctk.CTkInputDialog(text="Enter the sequence length: ", title="M value")
             m = int(pop_up_m.get_input())
             print(f"The m is: {m}")
             # Call MBit
@@ -89,27 +99,27 @@ def run_test():
             print("M-Bit response:", response)
         case NIST.AUTOCORRELATION:
             # Read X
-            pop_up_x = ctk.CTkInputDialog(text="Introduce X: ", title="X")
+            pop_up_x = ctk.CTkInputDialog(text="Enter X: ", title="X")
             x = int(pop_up_x.get_input())
             print(f"The x is: {x}")
             # Read Y
-            pop_up_y = ctk.CTkInputDialog(text="Introduce Y: ", title="Y")
+            pop_up_y = ctk.CTkInputDialog(text="Enter Y: ", title="Y")
             y = int(pop_up_y.get_input())
             print(f"The y is: {y}")
             # Call Autocorrelation
             response = autocorrelation(len(token), token, alpha, x, y)
             root.textbox.insert("0.0", response)
-            print("M-Bit response:", response)
+            print("Autocorrelation response:", response)
 
         case NIST.SERIA:
             # Read M
-            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="M Value")
+            pop_up_m = ctk.CTkInputDialog(text="Enter the sequence length: ", title="M Value")
             m = int(pop_up_m.get_input())
             print(f"The m is: {m}")
             # Call Serial
             response = serial(len(token), token, alpha, m)
             root.textbox.insert("0.0", response)
-            print("M-Bit response:", response)
+            print("Serial response:", response)
 
 
 class App(ctk.CTk):
@@ -159,7 +169,7 @@ class App(ctk.CTk):
         self.scaling_option_menu.grid(row=8, column=0, padx=20, pady=(10, 10))
 
         # INTERACTIUNEA CU USER-UL
-        self.entry = ctk.CTkEntry(self, placeholder_text="Introduceti hash-ul aici")
+        self.entry = ctk.CTkEntry(self, placeholder_text="Enter the hash")
         self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         self.main_button_1 = ctk.CTkButton(master=self, fg_color="transparent", border_width=2,
