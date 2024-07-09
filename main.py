@@ -4,8 +4,11 @@ from tkinter import END
 
 import customtkinter as ctk
 from enum import Enum
+
 from monobit import monoBit
 from mbit import mBit
+from serial import serial
+from autocorelation import autocorrelation
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -85,9 +88,28 @@ def run_test():
             root.textbox.insert("0.0", response)
             print("M-Bit response:", response)
         case NIST.AUTOCORRELATION:
-            print("Autocorrelation")
+            # Read X
+            pop_up_x = ctk.CTkInputDialog(text="Introduce X: ", title="Alpha")
+            x = int(pop_up_x.get_input())
+            print(f"The x is: {x}")
+            # Read Y
+            pop_up_y = ctk.CTkInputDialog(text="Introduce Y: ", title="Alpha")
+            y = int(pop_up_y.get_input())
+            print(f"The y is: {y}")
+            # Call Autocorrelation
+            response = autocorrelation(len(token), token, alpha, x, y)
+            root.textbox.insert("0.0", response)
+            print("M-Bit response:", response)
+
         case NIST.SERIA:
-            print("Seria")
+            # Read M
+            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="Alpha")
+            m = int(pop_up_m.get_input())
+            print(f"The m is: {m}")
+            # Call Serial
+            response = serial(len(token), token, alpha, m)
+            root.textbox.insert("0.0", response)
+            print("M-Bit response:", response)
 
 
 class App(ctk.CTk):
