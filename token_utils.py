@@ -1,21 +1,26 @@
 import re
 
-def validateToken(token):
-    return bool(re.search("^[01]+$", token))
 
-def deleteSpaces(token):
-    return token.replace(" ", "")
+def validateToken(_token: str) -> bool:
+    return bool(re.search("^[01]+$", _token))
 
-def deleteComma(token):
-    return token.replace(",", "")
 
-def formatToken(token):
-    noSpaceToken = deleteSpaces(token)
+def deleteSpaces(_token: str) -> str:
+    return _token.replace(" ", "")
+
+
+def deleteComma(_token: str) -> str:
+    return _token.replace(",", "")
+
+
+def formatToken(_token: str) -> str:
+    noSpaceToken = deleteSpaces(_token)
     return deleteComma(noSpaceToken)
 
-if __name__ == "__main__":
-    token = "1011,010010100110111010,01   110011"
-    newToken = formatToken(token)
-    k = validateToken(newToken)
-    print(newToken)
-    print(k)
+# Only for testing purposes
+# if __name__ == "__main__":
+#     _token = "1011,010010100110111010,01   110011"
+#     newToken = formatToken(_token)
+#     k = validateToken(newToken)
+#     print(newToken)
+#     print(k)

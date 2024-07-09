@@ -2,7 +2,7 @@ import math
 import scipy
 
 
-def monoBit(alpha, token):
+def monoBit(alpha: float, token: bytes) -> str:  # returneaza ca string un mesaj de eroare/succes catre terminal
     # H0: p = 0.5 (null hypothesis)
     # HA: p != 0.5 (alternative hypothesis)
 
@@ -31,6 +31,7 @@ def monoBit(alpha, token):
     return f"The sequence is not pseudo-random"
 
 
-if __name__ == '__main__':
-    k = monoBit(0.01, "101101001010011011101001110011")
-    print(k)
+# Only for testing purposes
+# if __name__ == '__main__':
+#     k = monoBit(0.01, bytes(list(int(i) for i in "101101001010011011101001110011")))
+#     print(k)

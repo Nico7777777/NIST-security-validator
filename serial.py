@@ -2,6 +2,7 @@ from typing import List
 from scipy.special import gammainc
 from math import pow, log2
 
+
 # Null hypothesis H0: The generated binary sequence is (pseudo)random.
 # Alternative hypothesis H1: The generated binary sequence is not (pseudo)random.
 
@@ -61,27 +62,27 @@ def serial(n: int, arr: str, alpha: float, m: int) -> str:
     sequences = build_secv(bytes(v), m)
 
     m_new = m
-     # Initialize the 3 functions that we will use to calculate the test functions.
+    # Initialize the 3 functions that we will use to calculate the test functions.
     functions = [0] * 3
     result = ""
 
     ct = 0
     for i, sequence in enumerate(sequences):
-      sum = 0  # Calculate the sum of squared frequencies
-      result += f"s_{i+1}: {sequence}\n"
-      found_patterns = found_pattern(sequence, m_new)
-      # print(found_patterns)
-      for pattern, frequency in found_patterns.items():
-        # Display the key + its value => items
-        result += f"Pattern: {pattern}, frequency: {frequency}\n"
-        sum = sum + pow(frequency, 2)
-        functions[ct] = ((pow(2, m_new)) / n) * sum - n
-      m_new = m_new - 1
-      ct = ct + 1
+        _sum = 0  # Calculate the sum of squared frequencies
+        result += f"s_{i + 1}: {sequence}\n"
+        found_patterns = found_pattern(sequence, m_new)
+        # print(found_patterns)
+        for pattern, frequency in found_patterns.items():
+            # Display the key + its value => items
+            result += f"Pattern: {pattern}, frequency: {frequency}\n"
+            _sum = _sum + pow(frequency, 2)
+            functions[ct] = ((pow(2, m_new)) / n) * _sum - n
+        m_new = m_new - 1
+        ct = ct + 1
 
     for i in range(0, 3):
-      result += f"{functions[i]}\n"
-      # If an element of the functions vector is not populated, it was set to 0 by the initial assignments [0] * 3
+        result += f"{functions[i]}\n"
+        # If an element of the functions vector is not populated, it was set to 0 by the initial assignments [0] * 3
     statistic_1 = functions[0] - functions[1]
     statistic_2 = functions[0] - 2 * functions[1] + functions[2]
 
@@ -98,6 +99,8 @@ def serial(n: int, arr: str, alpha: float, m: int) -> str:
     else:
         result += "The null hypothesis is not accepted at the significance level provided."
     return result
-if __name__ == '__main__':
-    k = serial(30, "101101001010011011101001110011", 0.01, 3)
-    print(k)
+
+# Only for testing purposes
+# if __name__ == '__main__':
+#     k = serial(30, "101101001010011011101001110011", 0.01, 3)
+#     print(k)

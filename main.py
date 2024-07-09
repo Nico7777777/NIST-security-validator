@@ -21,6 +21,7 @@ class NIST(Enum):
     AUTOCORRELATION = 3
     SERIA = 4
 
+
 test_number = NIST.MONOBIT
 root = None
 
@@ -43,38 +44,52 @@ def monobit_button_event():
     print("Monobit Event")
     global test_number
     test_number = NIST.MONOBIT
+    root.textbox.delete("0.0", END)
+    root.textbox.insert("0.0", "Monobit\n")
+    root.textbox.insert(END, "===========================================\n")
 
 
 def mbit_button_event():
     print("MBit Event")
     global test_number
     test_number = NIST.MBIT
+    root.textbox.delete("0.0", END)
+    root.textbox.insert("0.0", "MBit\n")
+    root.textbox.insert(END, "===========================================\n")
 
 
 def autocorrelation_button_event():
     print("Autocorrelation Event")
     global test_number
     test_number = NIST.AUTOCORRELATION
+    root.textbox.delete("0.0", END)
+    root.textbox.insert("0.0", "Autocorrelation\n")
+    root.textbox.insert(END, "===========================================\n")
 
 
 def seria_button_event():
     print("Seria Event")
     global test_number
     test_number = NIST.SERIA
+    root.textbox.delete("0.0", END)
+    root.textbox.insert("0.0", "Seria\n")
+    root.textbox.insert(END, "===========================================\n")
 
 
 def run_test():
-    root.textbox.delete('1.0', END)
+    # root.textbox.delete('1.0', END)
     print(test_number)
     token = root.entry.get()
     print("The token is: " + token)
 
     token = formatToken(token)
+    token_bytes = bytes(list(int(i) for i in token))
     print("The formated token is: " + token)
 
+    root.textbox.insert(END, 'You introduced the key: ' + str(token) + "\n")  # linia 0 - v1
     # Validate Token
     if not validateToken(token):
-        root.textbox.insert("0.0", "The hash is not valid.")
+        root.textbox.insert(END, "The hash is not valid.")  # linia 0 - v2
         print("M-Bit response:", "Token not valid")
         return
 
@@ -85,8 +100,8 @@ def run_test():
     match test_number:
         case NIST.MONOBIT:
             # Call Monobit
-            response = monoBit(alpha, token)
-            root.textbox.insert("0.0", response)
+            response = monoBit(alpha, token_bytes)
+            root.textbox.insert(END, response)
             print("Monobit response:", response)
         case NIST.MBIT:
             # Read M
@@ -94,8 +109,8 @@ def run_test():
             m = int(pop_up_m.get_input())
             print(f"The m is: {m}")
             # Call MBit
-            response = mBit(alpha, m, token)
-            root.textbox.insert("0.0", response)
+            response = mBit(alpha, m, token_bytes)
+            root.textbox.insert(END, response)  # linia 3
             print("M-Bit response:", response)
         case NIST.AUTOCORRELATION:
             # Read X
@@ -108,7 +123,7 @@ def run_test():
             print(f"The y is: {y}")
             # Call Autocorrelation
             response = autocorrelation(len(token), token, alpha, x, y)
-            root.textbox.insert("0.0", response)
+            root.textbox.insert(END, response)
             print("Autocorrelation response:", response)
 
         case NIST.SERIA:
@@ -118,7 +133,7 @@ def run_test():
             print(f"The m is: {m}")
             # Call Serial
             response = serial(len(token), token, alpha, m)
-            root.textbox.insert("0.0", response)
+            root.textbox.insert(END, response)
             print("Serial response:", response)
 
 
@@ -129,6 +144,7 @@ class App(ctk.CTk):
         # window configuration
         self.title("NIST security validator")
         self.geometry(f"{2400}x{1250}")
+        self.hash = None
 
         # configure grid layout - 4x4
         self.grid_columnconfigure(1, weight=1)
@@ -173,7 +189,8 @@ class App(ctk.CTk):
         self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         self.main_button_1 = ctk.CTkButton(master=self, fg_color="transparent", border_width=2,
-                                           text_color=("blue", "#DCE4EE"), text="Run tests", height=100, command=run_test)
+                                           text_color=("blue", "#DCE4EE"), text="Submit", height=100,
+                                           command=run_test)
         self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # TEXTBOX
