@@ -80,7 +80,7 @@ def run_test():
             print("Monobit response:", response)
         case NIST.MBIT:
             # Read M
-            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="Alpha")
+            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="M value")
             m = int(pop_up_m.get_input())
             print(f"The m is: {m}")
             # Call MBit
@@ -89,11 +89,11 @@ def run_test():
             print("M-Bit response:", response)
         case NIST.AUTOCORRELATION:
             # Read X
-            pop_up_x = ctk.CTkInputDialog(text="Introduce X: ", title="Alpha")
+            pop_up_x = ctk.CTkInputDialog(text="Introduce X: ", title="X")
             x = int(pop_up_x.get_input())
             print(f"The x is: {x}")
             # Read Y
-            pop_up_y = ctk.CTkInputDialog(text="Introduce Y: ", title="Alpha")
+            pop_up_y = ctk.CTkInputDialog(text="Introduce Y: ", title="Y")
             y = int(pop_up_y.get_input())
             print(f"The y is: {y}")
             # Call Autocorrelation
@@ -103,7 +103,7 @@ def run_test():
 
         case NIST.SERIA:
             # Read M
-            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="Alpha")
+            pop_up_m = ctk.CTkInputDialog(text="Introduce the sequence length: ", title="M Value")
             m = int(pop_up_m.get_input())
             print(f"The m is: {m}")
             # Call Serial
