@@ -52,3 +52,6 @@ def autocorrelation(n, arr, alpha, x, y):
         result += f"The null hypothesis is accepted at the significance level {alpha}\n"
     
     return result
+if __name__ == '__main__':
+    k = autocorrelation(30, "101101001010011011101001110011", 0.01, 6, 6)
+    print(k)
