@@ -1,4 +1,6 @@
 import math
+# Null hypothesis H0: The generated binary sequence is (pseudo)random.
+# Alternative hypothesis H1: The generated binary sequence is not (pseudo)random.
 
 def check_len(_v: bytes, _n: int) -> bool:
     if len(_v) < _n:
