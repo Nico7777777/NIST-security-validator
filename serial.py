@@ -82,7 +82,8 @@ def serial(n: int, arr: str, alpha: float, m: int) -> str:
 
     for i in range(0, 3):
         result += f"{functions[i]}\n"
-        # If an element of the functions vector is not populated, it was set to 0 by the initial assignments [0] * 3
+        # If an element of the functions vector is not populated,
+        # it was set to 0 by the initial assignments [0] * 3
     statistic_1 = functions[0] - functions[1]
     statistic_2 = functions[0] - 2 * functions[1] + functions[2]
 
